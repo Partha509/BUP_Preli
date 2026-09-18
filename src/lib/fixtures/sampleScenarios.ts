@@ -61,7 +61,7 @@ export const GRID_101_RESPONSE: OptimizeEnergyResponse = {
     {
       note_index: 0,
       applies: true,
-      directive_type: "solar_reduction",
+      directive_type: "solar_limit",
       structured_adjustment: {
         hours: [13, 14],
         factor: 0.2,
@@ -71,7 +71,7 @@ export const GRID_101_RESPONSE: OptimizeEnergyResponse = {
     {
       note_index: 1,
       applies: true,
-      directive_type: "no_charge_window",
+      directive_type: "battery_charge_limit",
       structured_adjustment: {
         hours: [14, 15],
       },

@@ -42,11 +42,11 @@ export function optimizeEnergySchedule(
     if (!dir.applies || !dir.structured_adjustment) continue;
     const dirHours = dir.structured_adjustment.hours || [];
 
-    if (dir.directive_type === "no_charge_window") {
+    if (dir.directive_type === "battery_charge_limit") {
       dirHours.forEach((h) => noChargeHours.add(h));
-    } else if (dir.directive_type === "no_discharge_window") {
+    } else if (dir.directive_type === "battery_discharge_limit") {
       dirHours.forEach((h) => noDischargeHours.add(h));
-    } else if (dir.directive_type === "max_grid_window") {
+    } else if (dir.directive_type === "grid_import_limit") {
       const cap = (dir.structured_adjustment as any).max_grid_kwh;
       if (typeof cap === "number") {
         dirHours.forEach((h) => {
@@ -54,7 +54,7 @@ export function optimizeEnergySchedule(
           maxGridLimits.set(h, Math.min(current, cap));
         });
       }
-    } else if (dir.directive_type === "minimum_battery_reserve") {
+    } else if (dir.directive_type === "battery_soc_target") {
       const res = (dir.structured_adjustment as any).minimum_energy_kwh;
       if (typeof res === "number") {
         dirHours.forEach((h) => {
