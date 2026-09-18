@@ -1,5 +1,5 @@
 import React from "react";
-import { Sparkles, User, Terminal } from "lucide-react";
+import { Sparkles, User } from "lucide-react";
 
 export interface ChatMessage {
   id: string;
@@ -22,22 +22,22 @@ export function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
       }`}
     >
       {isAssistant && (
-        <div className="p-1.5 rounded-md bg-primary/10 text-primary border border-primary/20 shrink-0 mt-0.5">
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className="w-6 h-6 rounded-full bg-secondary/80 border border-border/80 flex items-center justify-center text-[#E5B25D] shrink-0 mt-0.5">
+          <Sparkles className="w-3 h-3" />
         </div>
       )}
 
       <div
-        className={`max-w-[85%] rounded-xl p-3 leading-relaxed space-y-1 ${
+        className={`max-w-[85%] rounded-2xl p-3 leading-relaxed space-y-1 ${
           isAssistant
-            ? "bg-secondary/70 border border-border text-foreground shadow-2xs"
-            : "bg-primary text-primary-foreground font-sans font-medium"
+            ? "bg-card border border-border text-foreground shadow-xs"
+            : "bg-[#1B241F] text-[#E5B25D] border border-[#3A4B40] font-sans font-medium"
         }`}
       >
         <div className="whitespace-pre-wrap">{message.text}</div>
         <div
-          className={`text-[10px] text-right ${
-            isAssistant ? "text-muted-foreground" : "text-primary-foreground/70"
+          className={`text-[9px] text-right ${
+            isAssistant ? "text-muted-foreground" : "text-[#E5B25D]/70"
           }`}
         >
           {message.timestamp}
@@ -45,8 +45,8 @@ export function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
       </div>
 
       {!isAssistant && (
-        <div className="p-1.5 rounded-md bg-secondary border border-border shrink-0 mt-0.5 text-foreground">
-          <User className="w-3.5 h-3.5" />
+        <div className="w-6 h-6 rounded-full bg-secondary/80 border border-border/80 flex items-center justify-center shrink-0 mt-0.5 text-foreground">
+          <User className="w-3 h-3" />
         </div>
       )}
     </div>

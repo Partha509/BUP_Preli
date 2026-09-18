@@ -53,7 +53,6 @@ export function OperatorNotesEditor({ className = "" }: { className?: string }) 
   };
 
   const handleApplyChip = (text: string) => {
-    // If there's an empty or generic note, replace it; otherwise add or overwrite the last note
     if (notes.length === 1 && notes[0].includes("New operator")) {
       updateOperatorNotes([text]);
       return;
@@ -61,7 +60,6 @@ export function OperatorNotesEditor({ className = "" }: { className?: string }) 
     if (notes.length < 3) {
       updateOperatorNotes([...notes, text]);
     } else {
-      // Overwrite the last note
       const updated = [...notes];
       updated[updated.length - 1] = text;
       updateOperatorNotes(updated);
@@ -69,23 +67,25 @@ export function OperatorNotesEditor({ className = "" }: { className?: string }) 
   };
 
   return (
-    <div className={`rounded-xl border border-border bg-card p-5 md:p-6 space-y-5 ${className}`}>
+    <div className={`rounded-2xl border border-border bg-card p-4 sm:p-5 md:p-6 space-y-4 shadow-xs ${className}`}>
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-md bg-primary/10 text-primary">
-            <MessageSquareText className="w-4 h-4" />
+        <div className="flex items-center gap-2.5">
+          <div className="w-7 h-7 rounded-full bg-secondary/80 border border-border/80 flex items-center justify-center text-[#E5B25D]">
+            <MessageSquareText className="w-3.5 h-3.5" />
           </div>
           <div>
-            <h3 className="font-semibold text-sm">Operator Directives & Shift Notes</h3>
-            <p className="text-xs text-muted-foreground">
+            <h3 className="font-normal text-[11px] text-foreground tracking-[0.12em] uppercase font-mono">
+              Operator Directives & Shift Notes
+            </h3>
+            <p className="text-[10px] text-muted-foreground font-mono">
               Natural language campus instructions (1 to 3 non-empty notes per scenario)
             </p>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs text-muted-foreground">
+          <span className="font-mono text-[11px] text-muted-foreground">
             {notes.length}/3 Notes
           </span>
           <Button
@@ -93,9 +93,9 @@ export function OperatorNotesEditor({ className = "" }: { className?: string }) 
             variant="outline"
             onClick={handleAddNote}
             disabled={notes.length >= 3}
-            className="h-8 text-xs gap-1 font-mono"
+            className="h-8 text-xs gap-1 font-mono rounded-full uppercase tracking-wider"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-3 h-3" />
             <span>Add Note</span>
           </Button>
         </div>
@@ -106,10 +106,10 @@ export function OperatorNotesEditor({ className = "" }: { className?: string }) 
         {notes.map((note, idx) => (
           <div
             key={idx}
-            className="group relative flex items-start gap-2 p-3 rounded-lg border border-border bg-secondary/20 transition-colors hover:border-primary/30"
+            className="group relative flex items-start gap-2.5 p-3 rounded-2xl border border-border bg-secondary/20 transition-colors hover:border-strong-border"
           >
             <div className="pt-2">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-secondary border border-border text-[10px] font-mono font-bold text-muted-foreground">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-secondary border border-border text-[10px] font-mono font-semibold text-muted-foreground">
                 {idx + 1}
               </span>
             </div>
@@ -120,7 +120,7 @@ export function OperatorNotesEditor({ className = "" }: { className?: string }) 
                 onChange={(e) => handleNoteChange(idx, e.target.value)}
                 placeholder="Enter operator note describing temporary conditions..."
                 rows={2}
-                className="text-xs font-sans resize-none border-border/80 focus-visible:ring-primary/40 bg-card"
+                className="text-xs font-sans resize-none border-border/80 bg-card/60"
               />
             </div>
 
@@ -131,7 +131,7 @@ export function OperatorNotesEditor({ className = "" }: { className?: string }) 
               disabled={notes.length <= 1}
               title={notes.length <= 1 ? "Minimum 1 note required" : "Remove note"}
               aria-label={`Remove note ${idx + 1}`}
-              className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0 mt-1"
+              className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 shrink-0 mt-1 rounded-full"
             >
               <Trash2 className="w-3.5 h-3.5" />
             </Button>
@@ -140,9 +140,9 @@ export function OperatorNotesEditor({ className = "" }: { className?: string }) 
       </div>
 
       {/* Quick Suggestions / Chips */}
-      <div className="space-y-2 pt-1 border-t border-border/40">
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-medium">
-          <Lightbulb className="w-3.5 h-3.5 text-amber-500" />
+      <div className="space-y-2 pt-2 border-t border-border/40">
+        <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground uppercase tracking-wider font-mono">
+          <Lightbulb className="w-3.5 h-3.5 text-[#E5B25D]" />
           <span>Quick Note Templates (Click to insert):</span>
         </div>
 
@@ -152,9 +152,9 @@ export function OperatorNotesEditor({ className = "" }: { className?: string }) 
               key={i}
               type="button"
               onClick={() => handleApplyChip(chip.text)}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono border border-border bg-secondary/40 hover:bg-secondary text-muted-foreground hover:text-foreground transition-all duration-150 active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider border border-border bg-secondary/50 hover:bg-secondary text-muted-foreground hover:text-foreground transition-all duration-150 active:scale-95 cursor-pointer"
             >
-              <Sparkles className="w-3 h-3 text-primary" />
+              <Sparkles className="w-3 h-3 text-[#E5B25D]" />
               <span>{chip.label}</span>
             </button>
           ))}

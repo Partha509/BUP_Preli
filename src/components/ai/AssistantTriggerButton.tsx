@@ -22,15 +22,14 @@ export function AssistantTriggerButton({
         type="button"
         onClick={onClick}
         aria-label="Open GridWise Explanatory Copilot"
-        className="group relative flex items-center gap-2.5 px-4 py-3 rounded-full bg-primary text-primary-foreground font-mono text-xs font-semibold shadow-xl hover:shadow-primary/30 hover:scale-105 active:scale-95 transition-all duration-200 border border-primary-foreground/20"
+        className="group relative flex items-center gap-2.5 px-4 py-2.5 rounded-full bg-[#0E1311] text-[#E5B25D] border border-[#2D3A32] shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:border-[#3A4B40] hover:bg-[#151D19] active:scale-[0.98] transition-all text-xs font-mono uppercase tracking-[0.12em] select-none cursor-pointer"
       >
-        <span className="relative flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-400" />
+        <span className="relative flex h-2 w-2">
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E5B25D]" />
         </span>
 
-        <Sparkles className="w-4 h-4 transition-transform group-hover:rotate-12" />
-        <span className="hidden sm:inline">AI Copilot</span>
+        <Sparkles className="w-3.5 h-3.5 text-[#E5B25D]" />
+        <span className="text-[#F3F5F4] font-medium tracking-wider">AI Copilot</span>
       </button>
     </div>
   );

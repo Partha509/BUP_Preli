@@ -17,7 +17,6 @@ import {
   Calendar,
   CheckCircle2,
   Filter,
-  Layers,
   AlertTriangle,
   Scale,
 } from "lucide-react";
@@ -44,13 +43,13 @@ export function HourlyScheduleTable({ className = "" }: HourlyScheduleTableProps
   if (!activeResponse) {
     return (
       <div
-        className={`rounded-xl border border-dashed border-border bg-card/40 p-8 text-center space-y-3 ${className}`}
+        className={`rounded-2xl border border-dashed border-border bg-card/40 p-8 text-center space-y-3 ${className}`}
       >
-        <div className="p-3 rounded-full bg-secondary border border-border w-fit mx-auto text-muted-foreground">
-          <Calendar className="w-5 h-5" />
+        <div className="w-10 h-10 rounded-full bg-secondary border border-border flex items-center justify-center mx-auto text-muted-foreground">
+          <Calendar className="w-5 h-5 text-[#E5B25D]" />
         </div>
         <div className="space-y-1">
-          <h3 className="font-semibold text-sm text-foreground">
+          <h3 className="font-normal text-xs uppercase tracking-[0.12em] text-foreground">
             No 24-Hour Dispatch Plan Generated
           </h3>
           <p className="text-xs text-muted-foreground max-w-sm mx-auto">
@@ -86,34 +85,36 @@ export function HourlyScheduleTable({ className = "" }: HourlyScheduleTableProps
 
   return (
     <div
-      className={`rounded-xl border border-border bg-card p-4 md:p-6 space-y-4 font-mono ${className}`}
+      className={`rounded-2xl border border-border bg-card p-4 sm:p-5 md:p-6 space-y-4 font-mono shadow-xs ${className}`}
     >
       {/* Table Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
         <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <Scale className="w-4 h-4 text-primary" />
-            <h3 className="font-semibold text-sm text-foreground">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-full bg-secondary/80 border border-border/80 flex items-center justify-center text-[#E5B25D]">
+              <Scale className="w-3.5 h-3.5" />
+            </div>
+            <h3 className="font-normal text-[11px] text-foreground tracking-[0.12em] uppercase font-mono">
               24-Hour Dispatch Schedule & Balance Validation
             </h3>
           </div>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[10px] text-muted-foreground font-mono">
             Exact hourly breakdown &bull; Grid + SolarUsed + BatDis = Demand + BatChg (&plusmn;0.01 kWh tolerance)
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5">
           {/* Directive Hours Filter Toggle */}
           <button
             type="button"
             onClick={() => setFilterDirectiveHoursOnly(!filterDirectiveHoursOnly)}
-            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border text-xs font-mono transition-colors ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full border text-[11px] font-mono tracking-wider uppercase transition-colors cursor-pointer select-none ${
               filterDirectiveHoursOnly
-                ? "border-primary bg-primary/10 text-primary font-semibold"
+                ? "border-[#3A4B40] bg-[#1B241F] text-[#E5B25D]"
                 : "border-border bg-secondary/50 text-muted-foreground hover:text-foreground"
             }`}
           >
-            <Filter className="w-3.5 h-3.5" />
+            <Filter className="w-3 h-3" />
             <span>Directive Hours ({allDirectiveHours.size})</span>
           </button>
 
@@ -123,21 +124,21 @@ export function HourlyScheduleTable({ className = "" }: HourlyScheduleTableProps
       </div>
 
       {/* Table Container with Horizontal Scroll & Sticky First Column */}
-      <div className="overflow-x-auto rounded-lg border border-border/70">
+      <div className="overflow-x-auto rounded-xl border border-border/70 bg-card">
         <Table className="w-full text-xs">
-          <TableHeader className="bg-secondary/40">
-            <TableRow className="hover:bg-transparent">
-              <TableHead className="w-20 sticky left-0 bg-secondary z-10 font-bold">
+          <TableHeader className="bg-secondary/60">
+            <TableRow className="hover:bg-transparent border-b border-border/80">
+              <TableHead className="w-20 sticky left-0 bg-secondary/90 z-10 font-semibold text-[11px] tracking-wider uppercase text-foreground">
                 Hour
               </TableHead>
-              <TableHead className="text-right">Tariff (BDT)</TableHead>
-              <TableHead className="text-right">Demand (kWh)</TableHead>
-              <TableHead className="text-right text-amber-500">Solar Used</TableHead>
-              <TableHead className="text-center">Battery Action</TableHead>
-              <TableHead className="text-right text-sky-400">Battery After</TableHead>
-              <TableHead className="text-right text-indigo-400">Grid (kWh)</TableHead>
-              <TableHead className="text-right">Cost (BDT)</TableHead>
-              <TableHead className="text-center w-28">Energy Balance</TableHead>
+              <TableHead className="text-right text-[11px] tracking-wider uppercase">Tariff (BDT)</TableHead>
+              <TableHead className="text-right text-[11px] tracking-wider uppercase">Demand (kWh)</TableHead>
+              <TableHead className="text-right text-[11px] tracking-wider uppercase text-[#E5B25D]">Solar Used</TableHead>
+              <TableHead className="text-center text-[11px] tracking-wider uppercase">Battery Action</TableHead>
+              <TableHead className="text-right text-[11px] tracking-wider uppercase text-teal-400">Battery After</TableHead>
+              <TableHead className="text-right text-[11px] tracking-wider uppercase text-slate-300">Grid (kWh)</TableHead>
+              <TableHead className="text-right text-[11px] tracking-wider uppercase">Cost (BDT)</TableHead>
+              <TableHead className="text-center w-28 text-[11px] tracking-wider uppercase">Balance</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -149,8 +150,6 @@ export function HourlyScheduleTable({ className = "" }: HourlyScheduleTableProps
               const cost = Number((entry.grid_kwh * tariff).toFixed(2));
 
               // Balance Validation Equation:
-              // Left: Energy Supplied = Grid + SolarUsed + (Discharge ? BatKwh : 0)
-              // Right: Energy Consumed = Demand + (Charge ? BatKwh : 0)
               const supply =
                 entry.grid_kwh +
                 entry.solar_used_kwh +
@@ -172,25 +171,25 @@ export function HourlyScheduleTable({ className = "" }: HourlyScheduleTableProps
                   onMouseLeave={() => setHighlightedHours(null)}
                   className={`transition-colors duration-100 ${
                     isHighlighted
-                      ? "bg-primary/10 border-l-2 border-l-primary"
+                      ? "bg-[#1B241F] text-foreground border-l-2 border-l-[#E5B25D]"
                       : isPeakHour
-                      ? "bg-amber-500/5"
+                      ? "bg-[#E5B25D]/5"
                       : "hover:bg-secondary/30"
                   }`}
                 >
                   {/* Column 1: Hour (Sticky) */}
                   <TableCell
-                    className={`font-bold sticky left-0 z-10 ${
-                      isHighlighted ? "bg-primary/20 text-primary" : "bg-card text-foreground"
+                    className={`font-semibold sticky left-0 z-10 ${
+                      isHighlighted ? "bg-[#1B241F] text-[#E5B25D]" : "bg-card text-foreground"
                     }`}
                   >
                     {entry.hour.toString().padStart(2, "0")}:00
                   </TableCell>
 
-                  {/* Column 2: Tariff with intensity color */}
+                  {/* Column 2: Tariff */}
                   <TableCell
-                    className={`text-right font-semibold ${
-                      isHighTariff ? "text-purple-400" : "text-muted-foreground"
+                    className={`text-right ${
+                      isHighTariff ? "text-emerald-400 font-medium" : "text-muted-foreground"
                     }`}
                   >
                     ৳{tariff.toFixed(2)}
@@ -202,57 +201,54 @@ export function HourlyScheduleTable({ className = "" }: HourlyScheduleTableProps
                   </TableCell>
 
                   {/* Column 4: Solar Used */}
-                  <TableCell className="text-right text-amber-500 font-medium">
-                    {entry.solar_used_kwh.toFixed(2)}
+                  <TableCell className="text-right font-medium text-[#E5B25D]">
+                    {entry.solar_used_kwh > 0 ? entry.solar_used_kwh.toFixed(2) : "0.00"}
                   </TableCell>
 
-                  {/* Column 5: Battery Action */}
+                  {/* Column 5: Battery Action Badge */}
                   <TableCell className="text-center">
                     <BatteryActionBadge
                       action={entry.battery_action}
-                      kwh={entry.battery_kwh}
+                      amountKwh={entry.battery_kwh}
                     />
                   </TableCell>
 
-                  {/* Column 6: Battery Storage After */}
-                  <TableCell className="text-right text-sky-400 font-medium">
+                  {/* Column 6: Battery After */}
+                  <TableCell className="text-right font-medium text-teal-400">
                     {entry.battery_energy_after_kwh.toFixed(2)}
                   </TableCell>
 
                   {/* Column 7: Grid Purchase */}
                   <TableCell
-                    className={`text-right font-bold ${
-                      isPeakHour ? "text-amber-500" : "text-indigo-400"
+                    className={`text-right font-semibold ${
+                      isPeakHour ? "text-[#E5B25D]" : "text-foreground"
                     }`}
                   >
                     {entry.grid_kwh.toFixed(2)}
-                    {isPeakHour && (
-                      <span className="ml-1 text-[10px] text-amber-500">(PEAK)</span>
-                    )}
                   </TableCell>
 
-                  {/* Column 8: Hourly Cost */}
-                  <TableCell className="text-right font-medium text-foreground">
+                  {/* Column 8: Cost BDT */}
+                  <TableCell className="text-right text-foreground font-semibold">
                     ৳{cost.toFixed(2)}
                   </TableCell>
 
-                  {/* Column 9: Energy Balance Check Pill */}
+                  {/* Column 9: Energy Balance Check */}
                   <TableCell className="text-center">
                     {isBalanced ? (
                       <span
-                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20"
-                        title={`Supply: ${supply.toFixed(2)} = Demand+Charge: ${consumption.toFixed(2)}`}
+                        className="inline-flex items-center gap-1 text-[10px] text-emerald-400 font-medium uppercase px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/30"
+                        title={`Supply: ${supply.toFixed(2)} = Consumption: ${consumption.toFixed(2)}`}
                       >
                         <CheckCircle2 className="w-3 h-3" />
-                        <span>Valid</span>
+                        <span>0.00</span>
                       </span>
                     ) : (
                       <span
-                        className="inline-flex items-center gap-1 text-[11px] font-semibold text-destructive bg-destructive/10 px-2 py-0.5 rounded border border-destructive/20"
-                        title={`Delta: ${balanceDelta.toFixed(3)} kWh exceeds 0.01 kWh threshold`}
+                        className="inline-flex items-center gap-1 text-[10px] text-rose-400 font-medium uppercase px-2 py-0.5 rounded-full bg-rose-500/10 border border-rose-500/30"
+                        title={`Delta: ${balanceDelta.toFixed(3)} kWh`}
                       >
                         <AlertTriangle className="w-3 h-3" />
-                        <span>Δ {balanceDelta.toFixed(2)}</span>
+                        <span>&Delta;{balanceDelta.toFixed(2)}</span>
                       </span>
                     )}
                   </TableCell>
@@ -261,28 +257,6 @@ export function HourlyScheduleTable({ className = "" }: HourlyScheduleTableProps
             })}
           </TableBody>
         </Table>
-      </div>
-
-      {/* Summary Footer Row */}
-      <div className="p-3 rounded-lg border border-border bg-secondary/30 flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-4 text-muted-foreground">
-          <span>
-            Total Rows: <strong className="text-foreground">{displayedRows.length}</strong> / 24
-          </span>
-          <span>
-            Peak Grid Import:{" "}
-            <strong className="text-amber-500">{peak_grid_kwh.toFixed(2)} kWh</strong>
-          </span>
-        </div>
-
-        <div className="flex items-center gap-4">
-          <span>
-            Total Grid: <strong className="text-indigo-400">{total_grid_kwh.toFixed(2)} kWh</strong>
-          </span>
-          <span>
-            Total Cost: <strong className="text-emerald-500">৳{total_cost_bdt.toFixed(2)} BDT</strong>
-          </span>
-        </div>
       </div>
     </div>
   );

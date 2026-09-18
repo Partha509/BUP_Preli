@@ -18,32 +18,32 @@ export function MetricCard({
   unit,
   subtext,
   icon: Icon,
-  iconColor = "text-primary",
+  iconColor = "text-[#E5B25D]",
   badge,
   className = "",
 }: MetricCardProps) {
   return (
     <div
-      className={`relative p-4 md:p-5 rounded-xl border border-border bg-card/70 backdrop-blur-xs flex flex-col justify-between space-y-3 transition-all duration-200 hover:border-border/90 hover:shadow-xs ${className}`}
+      className={`relative p-4 sm:p-5 rounded-2xl border border-border bg-card flex flex-col justify-between space-y-3 transition-all hover:border-strong-border shadow-xs ${className}`}
     >
-      {/* Card Header: Title & Icon */}
+      {/* Card Header: Title & Circular Icon */}
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+        <span className="text-[11px] font-normal text-muted-foreground uppercase tracking-[0.12em]">
           {title}
         </span>
-        <div className={`p-2 rounded-lg bg-secondary/80 border border-border/40 ${iconColor}`}>
-          <Icon className="w-4 h-4" />
+        <div className={`w-7 h-7 rounded-full bg-secondary/80 border border-border/80 flex items-center justify-center ${iconColor}`}>
+          <Icon className="w-3.5 h-3.5" />
         </div>
       </div>
 
       {/* Main Metric Value */}
       <div className="space-y-1">
-        <div className="flex items-baseline gap-1.5 font-mono">
-          <span className="text-2xl md:text-3xl font-extrabold tracking-tight text-foreground">
+        <div className="flex items-baseline gap-1 font-mono">
+          <span className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground tabular-nums">
             {value}
           </span>
           {unit && (
-            <span className="text-xs font-semibold text-muted-foreground">
+            <span className="text-xs font-normal text-muted-foreground">
               {unit}
             </span>
           )}

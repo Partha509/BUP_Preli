@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useScenario } from "@/context/ScenarioContext";
-import { Download, FileText, FileJson, Check } from "lucide-react";
+import { FileText, FileJson, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface TableExportButtonProps {
@@ -95,13 +95,13 @@ export function TableExportButton({ className = "" }: TableExportButtonProps) {
         variant="outline"
         size="sm"
         onClick={exportCSV}
-        className="h-8 gap-1.5 text-xs font-mono"
+        className="h-8 gap-1 text-[11px] font-mono tracking-wider uppercase rounded-full border border-border/80 bg-secondary/40 px-3"
         title="Download schedule as CSV spreadsheet"
       >
         {downloadedFormat === "CSV" ? (
-          <Check className="w-3.5 h-3.5 text-emerald-500" />
+          <Check className="w-3 h-3 text-emerald-400" />
         ) : (
-          <FileText className="w-3.5 h-3.5" />
+          <FileText className="w-3 h-3 text-muted-foreground" />
         )}
         <span>CSV</span>
       </Button>
@@ -110,13 +110,13 @@ export function TableExportButton({ className = "" }: TableExportButtonProps) {
         variant="outline"
         size="sm"
         onClick={exportJSON}
-        className="h-8 gap-1.5 text-xs font-mono"
+        className="h-8 gap-1 text-[11px] font-mono tracking-wider uppercase rounded-full border border-border/80 bg-secondary/40 px-3"
         title="Download complete JSON API response"
       >
         {downloadedFormat === "JSON" ? (
-          <Check className="w-3.5 h-3.5 text-emerald-500" />
+          <Check className="w-3 h-3 text-emerald-400" />
         ) : (
-          <FileJson className="w-3.5 h-3.5" />
+          <FileJson className="w-3 h-3 text-muted-foreground" />
         )}
         <span>JSON</span>
       </Button>

@@ -50,7 +50,6 @@ import {
   Alert,
   AlertTitle,
   AlertDescription,
-  ThemeToggle,
 } from "@/components/ui";
 import {
   Zap,
@@ -82,18 +81,20 @@ export default function DesignSystemKitchenSink() {
               <ArrowLeft className="w-4 h-4" />
             </Link>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-                <Layers className="w-6 h-6 text-primary" />
-                GridWise Component System
+              <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
+                <span className="font-semibold text-[#F3F5F4]">GridWise</span>
+                <span className="font-light text-[#E5B25D]">Design System</span>
               </h1>
-              <p className="text-xs md:text-sm text-muted-foreground">
-                Industrial Primitives Showcase &bull; Prompt 03 Verification
+              <p className="text-xs text-muted-foreground font-mono">
+                Industrial Primitives Showcase &bull; Dark Control Room Aesthetic
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
-            <ThemeToggle />
+            <span className="text-[11px] font-mono uppercase tracking-wider px-3 py-1 rounded-full border border-[#3A4B40] bg-[#1B241F] text-[#E5B25D]">
+              Dark Control Room
+            </span>
           </div>
         </div>
 

@@ -32,7 +32,7 @@ export function ApiErrorAlert({ className = "" }: ApiErrorAlertProps) {
   return (
     <div
       role="alert"
-      className={`rounded-xl border border-destructive/50 bg-destructive/10 p-4 text-xs font-mono space-y-3 transition-all ${className}`}
+      className={`rounded-2xl border border-destructive/40 bg-destructive/10 p-4 text-xs font-mono space-y-3 transition-all ${className}`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-2.5">
@@ -67,7 +67,7 @@ export function ApiErrorAlert({ className = "" }: ApiErrorAlertProps) {
           size="sm"
           disabled={isLoading}
           onClick={() => executeOptimization()}
-          className="shrink-0 font-mono text-xs border-destructive/40 hover:bg-destructive/20 text-destructive hover:text-foreground"
+          className="shrink-0 font-mono text-xs border-destructive/40 hover:bg-destructive/20 text-destructive hover:text-foreground rounded-full px-3.5"
         >
           <RefreshCw className={`w-3.5 h-3.5 mr-1.5 ${isLoading ? "animate-spin" : ""}`} />
           <span>Retry Optimization</span>
@@ -75,7 +75,7 @@ export function ApiErrorAlert({ className = "" }: ApiErrorAlertProps) {
       </div>
 
       {isTimeout && (
-        <div className="p-2.5 rounded-md bg-secondary/50 text-[11px] text-muted-foreground">
+        <div className="p-2.5 rounded-xl bg-secondary/40 border border-border/60 text-[11px] text-muted-foreground">
           <strong>Operator Notice:</strong> The BUP Hackathon evaluation policy enforces a strict 30-second execution budget per scenario. Verify your LLM inference and solver runtime bounds.
         </div>
       )}
