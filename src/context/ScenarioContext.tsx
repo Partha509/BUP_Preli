@@ -43,7 +43,7 @@ export function ScenarioProvider({ children }: { children: React.ReactNode }) {
   );
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [useMockFallback, setUseMockFallback] = useState<boolean>(true); // Default true during offline UI development
+  const [useMockFallback, setUseMockFallback] = useState<boolean>(false); // Default false for production live backend optimization
   const [highlightedHours, setHighlightedHours] = useState<number[] | null>(null);
 
   /**

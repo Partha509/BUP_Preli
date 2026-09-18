@@ -23,11 +23,11 @@ export class GridWiseApiClient {
   private timeoutMs: number;
 
   constructor(baseUrl?: string, timeoutMs: number = 30000) {
-    // In browser, fallback to localhost:8000 or relative /api if needed
+    // In browser, fallback to same origin ("") or relative path if NEXT_PUBLIC_API_URL is not set
     this.baseUrl = (
       baseUrl ||
       process.env.NEXT_PUBLIC_API_URL ||
-      "http://localhost:8000"
+      ""
     ).replace(/\/$/, "");
     this.timeoutMs = timeoutMs;
   }
