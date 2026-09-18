@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Base Surface Tokens - Clean Light Mode */
+    --background: 210 20% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Brand Primary - Industrial Emerald/Teal */
+    --primary: 160 84% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Supporting Neutral Surfaces */
+    --secondary: 214 32% 93%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 20% 94%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 214 32% 93%;
+    --accent-foreground: 222 47% 11%;
+
+    /* Borders & Inputs */
+    --border: 214 32% 88%;
+    --strong-border: 215 25% 75%;
+    --input: 214 32% 88%;
+    --ring: 160 84% 36%;
+    --radius: 0.5rem;
+
+    /* Status Semantics */
+    --success: 158 75% 38%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    --danger: 0 84% 60%;
+    --danger-foreground: 0 0% 100%;
+    --info: 217 91% 60%;
+    --info-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* GridWise Energy Domain Semantics (Light) */
+    --energy-solar: #d97706;        /* Warm Amber/Gold */
+    --energy-solar-bg: #fef3c7;
+    --energy-battery: #0284c7;      /* Cyan/Teal BESS */
+    --energy-battery-bg: #e0f2fe;
+    --energy-grid: #4f46e5;         /* Slate/Indigo Grid */
+    --energy-grid-bg: #e0e7ff;
+    --energy-demand: #e11d48;       /* Rose/Coral Demand */
+    --energy-demand-bg: #ffe4e6;
+    --energy-tariff: #059669;       /* Emerald Tariff */
+    --energy-tariff-bg: #d1fae5;
+
+    /* Directive Status Semantics */
+    --directive-solar: #d97706;
+    --directive-reserve: #0284c7;
+    --directive-nocharge: #7c3aed;
+    --directive-nodischarge: #e11d48;
+    --directive-gridcap: #4f46e5;
+    --directive-noop: #64748b;
+  }
+
+  .dark {
+    /* Base Surface Tokens - Industrial Control Room Dark Mode */
+    --background: 222 47% 6%;
+    --foreground: 213 31% 93%;
+    --card: 222 47% 9%;
+    --card-foreground: 213 31% 93%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 213 31% 93%;
+
+    /* Brand Primary - Industrial Emerald/Teal */
+    --primary: 160 84% 39%;
+    --primary-foreground: 222 47% 6%;
+
+    /* Supporting Dark Surfaces */
+    --secondary: 217 33% 15%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 14%;
+    --muted-foreground: 217 19% 65%;
+    --accent: 217 33% 16%;
+    --accent-foreground: 210 40% 98%;
+
+    /* Precision Borders & Focus Rings */
+    --border: 217 33% 18%;
+    --strong-border: 217 33% 28%;
+    --input: 217 33% 18%;
+    --ring: 160 84% 39%;
+
+    /* Status Semantics */
+    --success: 158 64% 52%;
+    --success-foreground: 222 47% 6%;
+    --warning: 45 93% 58%;
+    --warning-foreground: 222 47% 6%;
+    --danger: 0 72% 51%;
+    --danger-foreground: 0 0% 100%;
+    --info: 213 94% 68%;
+    --info-foreground: 222 47% 6%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* GridWise Energy Domain Semantics (Dark Control Room) */
+    --energy-solar: #fbbf24;        /* Luminous Warm Amber */
+    --energy-solar-bg: rgba(251, 191, 36, 0.12);
+    --energy-battery: #38bdf8;      /* Electric Cyan/Teal */
+    --energy-battery-bg: rgba(56, 189, 248, 0.12);
+    --energy-grid: #818cf8;         /* Substation Indigo */
+    --energy-grid-bg: rgba(129, 140, 248, 0.12);
+    --energy-demand: #fb7185;       /* Sharp Coral Load */
+    --energy-demand-bg: rgba(251, 113, 133, 0.12);
+    --energy-tariff: #34d399;       /* Tariff Emerald */
+    --energy-tariff-bg: rgba(52, 211, 153, 0.12);
+
+    /* Directive Status Semantics */
+    --directive-solar: #fbbf24;
+    --directive-reserve: #38bdf8;
+    --directive-nocharge: #a78bfa;
+    --directive-nodischarge: #fb7185;
+    --directive-gridcap: #818cf8;
+    --directive-noop: #94a3b8;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  /* Tabular figures for all telemetry, meters, and financial readouts */
+  .tabular-nums, table, code, pre, .font-mono {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Custom Sleek Industrial Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground) / 0.25);
+    border-radius: 4px;
+    border: 1px solid transparent;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--muted-foreground) / 0.45);
+  }
+
+  /* Accessibility: Respect Reduced Motion Preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
