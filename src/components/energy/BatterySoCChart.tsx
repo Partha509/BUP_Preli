@@ -46,9 +46,9 @@ export function BatterySoCChart({ className = "" }: BatterySoCChartProps) {
   const reserveDirectives = directive_interpretation.filter(
     (d) =>
       d.applies &&
-      (d.directive_type === "minimum_battery_reserve" ||
-        d.directive_type === "no_charge_window" ||
-        d.directive_type === "no_discharge_window")
+      (d.directive_type === "battery_soc_target" ||
+        d.directive_type === "battery_charge_limit" ||
+        d.directive_type === "battery_discharge_limit")
   );
 
   return (
@@ -156,9 +156,9 @@ export function BatterySoCChart({ className = "" }: BatterySoCChartProps) {
               const startLabel = `${hours[0].toString().padStart(2, "0")}:00`;
               const endLabel = `${hours[hours.length - 1].toString().padStart(2, "0")}:00`;
               const color =
-                dir.directive_type === "no_charge_window"
+                dir.directive_type === "battery_charge_limit"
                   ? "rgba(167, 139, 250, 0.12)"
-                  : dir.directive_type === "no_discharge_window"
+                  : dir.directive_type === "battery_discharge_limit"
                   ? "rgba(251, 113, 133, 0.12)"
                   : "rgba(45, 212, 191, 0.12)";
 

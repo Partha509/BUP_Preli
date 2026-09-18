@@ -4,11 +4,11 @@
  */
 
 export type DirectiveType =
-  | "solar_reduction"
-  | "minimum_battery_reserve"
-  | "no_charge_window"
-  | "no_discharge_window"
-  | "max_grid_window"
+  | "solar_limit"
+  | "battery_soc_target"
+  | "battery_charge_limit"
+  | "battery_discharge_limit"
+  | "grid_import_limit"
   | "no_op";
 
 export type BatteryAction = "charge" | "discharge" | "idle";

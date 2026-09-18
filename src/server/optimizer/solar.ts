@@ -11,9 +11,9 @@ export function computeEffectiveSolar(
 ): number[] {
   const effectiveSolar = hours.map((h) => h.solar_kwh);
 
-  // Apply all applicable solar_reduction directives
+  // Apply all applicable solar_limit directives
   for (const dir of directives) {
-    if (dir.applies && dir.directive_type === "solar_reduction" && dir.structured_adjustment) {
+    if (dir.applies && dir.directive_type === "solar_limit" && dir.structured_adjustment) {
       const { hours: affectedHours, factor } = dir.structured_adjustment as {
         hours: number[];
         factor: number;

@@ -110,7 +110,7 @@ All extracted adjustments (such as solar curtailment factors, battery reserves, 
       const totalSolarUsed = hourly_plan.reduce((sum, h) => sum + h.solar_used_kwh, 0);
       const totalSolarPotential = activeRequest.hours.reduce((sum, h) => sum + h.solar_kwh, 0);
       const solarDirectives = directive_interpretation.filter(
-        (d) => d.applies && d.directive_type === "solar_reduction"
+        (d) => d.applies && d.directive_type === "solar_limit"
       );
 
       return `**Solar Utilization Analysis:**

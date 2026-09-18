@@ -16,10 +16,10 @@ Your task is to interpret 1 to 3 operator notes for a 24-hour campus energy sche
 
 ### SUPPORTED DIRECTIVE TYPES & REQUIRED SHAPES:
 Only the following 6 directive types are recognized by the system. Do NOT invent or emit any other directive types.
-NEVER create types like "battery_soc_target", "grid_import_limit", "demand_response", "load_shift", etc. — these are NOT valid.
+NEVER create types like "demand_response", "load_shift", etc. — these are NOT valid.
 You MUST map every note to one of the 6 types below, or classify it as "no_op".
 
-1. solar_reduction:
+1. solar_limit:
    - Meaning: Reduces usable rooftop solar during specific hours.
    - applies: true
    - structured_adjustment: {"hours": [integer], "factor": number}
@@ -29,7 +29,7 @@ You MUST map every note to one of the 6 types below, or classify it as "no_op".
      * "output drops to 25%" -> factor = 0.25
      * "Solar output will drop to about 20% from 1 PM to 3 PM." -> hours: [13, 14], factor: 0.2
 
-2. minimum_battery_reserve:
+2. battery_soc_target:
    - Meaning: Keeps battery energy at or above a required level during specific hours.
    - applies: true
    - structured_adjustment: {"hours": [integer], "minimum_energy_kwh": number}
@@ -40,21 +40,21 @@ You MUST map every note to one of the 6 types below, or classify it as "no_op".
      * "Keep at least 120 kWh in reserve from 6 PM until 9 PM." -> hours: [18, 19, 20], minimum_energy_kwh: 120
      * "Battery should be at 80% by 5 PM." -> hours: [17], minimum_energy_kwh: ${(battery.capacity_kwh * 0.8).toFixed(1)}
 
-3. no_charge_window:
+3. battery_charge_limit:
    - Meaning: Battery charging is forbidden/unavailable during specific hours.
    - applies: true
    - structured_adjustment: {"hours": [integer]}
    - Examples:
      * "Do not charge the battery between 2 PM and 4 PM." -> hours: [14, 15]
 
-4. no_discharge_window:
+4. battery_discharge_limit:
    - Meaning: Battery discharging is forbidden/unavailable during specific hours.
    - applies: true
    - structured_adjustment: {"hours": [integer]}
    - Examples:
      * "Battery discharge is not allowed from 8 AM to 10 AM." -> hours: [8, 9]
 
-5. max_grid_window:
+5. grid_import_limit:
    - Meaning: Grid import may not exceed a stated amount during specific hours.
    - applies: true
    - structured_adjustment: {"hours": [integer], "max_grid_kwh": number}
@@ -100,7 +100,7 @@ Return a strictly valid JSON array of objects containing exactly one entry for e
   {
     "note_index": 0,
     "applies": true | false,
-    "directive_type": "solar_reduction" | "minimum_battery_reserve" | "no_charge_window" | "no_discharge_window" | "max_grid_window" | "no_op",
+    "directive_type": "solar_limit" | "battery_soc_target" | "battery_charge_limit" | "battery_discharge_limit" | "grid_import_limit" | "no_op",
     "structured_adjustment": { ... } | null,
     "explanation": "Concise factual reason for this interpretation"
   }

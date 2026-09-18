@@ -11,7 +11,7 @@ export function DirectiveBadge({ type, className = "" }: DirectiveBadgeProps) {
   const baseClasses = `inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full font-mono text-[10px] font-normal uppercase tracking-wider border transition-colors select-none ${className}`;
 
   switch (type) {
-    case "solar_reduction":
+    case "solar_limit":
       return (
         <span
           className={baseClasses}
@@ -22,11 +22,11 @@ export function DirectiveBadge({ type, className = "" }: DirectiveBadgeProps) {
           }}
         >
           <Sun className="w-3 h-3" />
-          <span>solar_reduction</span>
+          <span>solar_limit</span>
         </span>
       );
 
-    case "minimum_battery_reserve":
+    case "battery_soc_target":
       return (
         <span
           className={baseClasses}
@@ -37,11 +37,11 @@ export function DirectiveBadge({ type, className = "" }: DirectiveBadgeProps) {
           }}
         >
           <BatteryCharging className="w-3 h-3" />
-          <span>minimum_battery_reserve</span>
+          <span>battery_soc_target</span>
         </span>
       );
 
-    case "no_charge_window":
+    case "battery_charge_limit":
       return (
         <span
           className={baseClasses}
@@ -52,11 +52,11 @@ export function DirectiveBadge({ type, className = "" }: DirectiveBadgeProps) {
           }}
         >
           <Ban className="w-3 h-3" />
-          <span>no_charge_window</span>
+          <span>battery_charge_limit</span>
         </span>
       );
 
-    case "no_discharge_window":
+    case "battery_discharge_limit":
       return (
         <span
           className={baseClasses}
@@ -67,11 +67,11 @@ export function DirectiveBadge({ type, className = "" }: DirectiveBadgeProps) {
           }}
         >
           <ShieldAlert className="w-3 h-3" />
-          <span>no_discharge_window</span>
+          <span>battery_discharge_limit</span>
         </span>
       );
 
-    case "max_grid_window":
+    case "grid_import_limit":
       return (
         <span
           className={baseClasses}
@@ -82,7 +82,7 @@ export function DirectiveBadge({ type, className = "" }: DirectiveBadgeProps) {
           }}
         >
           <Zap className="w-3 h-3" />
-          <span>max_grid_window</span>
+          <span>grid_import_limit</span>
         </span>
       );
 

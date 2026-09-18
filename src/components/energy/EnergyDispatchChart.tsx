@@ -186,15 +186,15 @@ export function EnergyDispatchChart({ className = "" }: EnergyDispatchChartProps
                 const endLabel = `${hours[hours.length - 1].toString().padStart(2, "0")}:00`;
 
                 let fillColor = "rgba(148, 163, 184, 0.08)";
-                if (dir.directive_type === "solar_reduction") {
+                if (dir.directive_type === "solar_limit") {
                   fillColor = "rgba(229, 178, 93, 0.12)";
-                } else if (dir.directive_type === "no_charge_window") {
+                } else if (dir.directive_type === "battery_charge_limit") {
                   fillColor = "rgba(167, 139, 250, 0.12)";
-                } else if (dir.directive_type === "no_discharge_window") {
+                } else if (dir.directive_type === "battery_discharge_limit") {
                   fillColor = "rgba(251, 113, 133, 0.12)";
-                } else if (dir.directive_type === "max_grid_window") {
+                } else if (dir.directive_type === "grid_import_limit") {
                   fillColor = "rgba(148, 163, 184, 0.12)";
-                } else if (dir.directive_type === "minimum_battery_reserve") {
+                } else if (dir.directive_type === "battery_soc_target") {
                   fillColor = "rgba(45, 212, 191, 0.12)";
                 }
 

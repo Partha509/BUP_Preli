@@ -17,11 +17,11 @@ export class GuardrailError extends Error {
 }
 
 const SUPPORTED_DIRECTIVES = new Set<DirectiveType>([
-  "solar_reduction",
-  "minimum_battery_reserve",
-  "no_charge_window",
-  "no_discharge_window",
-  "max_grid_window",
+  "solar_limit",
+  "battery_soc_target",
+  "battery_charge_limit",
+  "battery_discharge_limit",
+  "grid_import_limit",
   "no_op",
 ]);
 
@@ -135,23 +135,23 @@ export function validateAndGuardrailDirectives(
       }
 
       // Validate numeric parameters per directive type
-      if (finalType === "solar_reduction") {
+      if (finalType === "solar_limit") {
         let factor = Number((rawAdj as any).factor);
         if (isNaN(factor)) factor = 0.0;
         // Clamp factor strictly between 0 and 1
         factor = Math.max(0, Math.min(1, factor));
         finalAdjustment = { hours: validHours, factor };
-      } else if (finalType === "minimum_battery_reserve") {
+      } else if (finalType === "battery_soc_target") {
         let minEnergy = Number((rawAdj as any).minimum_energy_kwh);
         if (isNaN(minEnergy) || minEnergy < 0) minEnergy = battery.minimum_energy_kwh;
         // Clamp reserve to battery capacity
         minEnergy = Math.min(battery.capacity_kwh, Math.max(0, minEnergy));
         finalAdjustment = { hours: validHours, minimum_energy_kwh: minEnergy };
-      } else if (finalType === "max_grid_window") {
+      } else if (finalType === "grid_import_limit") {
         let maxGrid = Number((rawAdj as any).max_grid_kwh);
         if (isNaN(maxGrid) || maxGrid < 0) maxGrid = 0;
         finalAdjustment = { hours: validHours, max_grid_kwh: maxGrid };
-      } else if (finalType === "no_charge_window" || finalType === "no_discharge_window") {
+      } else if (finalType === "battery_charge_limit" || finalType === "battery_discharge_limit") {
         finalAdjustment = { hours: validHours };
       }
     }
