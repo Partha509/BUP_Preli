@@ -85,7 +85,8 @@ export function HourlyScheduleTable({ className = "" }: HourlyScheduleTableProps
 
   return (
     <div
-      className={`rounded-2xl border border-border bg-card p-4 sm:p-5 md:p-6 space-y-4 font-mono shadow-xs ${className}`}
+      id="demo-section-schedule"
+      className={`rounded-2xl border border-border bg-card p-4 sm:p-5 md:p-6 space-y-4 font-mono shadow-xs transition-all duration-300 ${className}`}
     >
       {/* Table Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">

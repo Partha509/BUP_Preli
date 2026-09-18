@@ -60,7 +60,10 @@ export function DirectiveInterpretationList({ className = "" }: { className?: st
   const interpretations = activeResponse.directive_interpretation || [];
 
   return (
-    <div className={`rounded-2xl border border-border bg-card p-4 sm:p-5 md:p-6 space-y-5 shadow-xs ${className}`}>
+    <div
+      id="demo-section-directives"
+      className={`rounded-2xl border border-border bg-card p-4 sm:p-5 md:p-6 space-y-5 shadow-xs transition-all duration-300 ${className}`}
+    >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
         <div className="flex items-center gap-2.5">

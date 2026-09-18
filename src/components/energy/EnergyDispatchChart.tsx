@@ -103,7 +103,7 @@ export function EnergyDispatchChart({ className = "" }: EnergyDispatchChartProps
   );
 
   return (
-    <div className={`space-y-4 ${className}`}>
+    <div id="demo-section-chart" className={`space-y-4 transition-all duration-300 ${className}`}>
       <div className="rounded-2xl border border-border bg-card p-4 sm:p-5 md:p-6 space-y-4 shadow-xs">
         {/* Header & Interactive Toggles */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-border pb-4">

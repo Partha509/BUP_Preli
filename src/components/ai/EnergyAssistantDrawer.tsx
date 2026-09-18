@@ -58,8 +58,9 @@ export function EnergyAssistantDrawer({
    * Generates domain-aware explanation strictly grounded in active scenario results.
    * Never alters the scenario or runs client-side optimization.
    */
-  const generateExplanation = (query: string): string => {
-    const q = query.toLowerCase();
+  const generateExplanation = React.useCallback(
+    (query: string): string => {
+      const q = query.toLowerCase();
 
     if (!activeResponse) {
       return "No optimization plan has been calculated yet. Please click 'Optimize Energy' on the console dashboard to dispatch POST /optimize-energy first.";
@@ -150,41 +151,57 @@ As required by Section 02.2 of the specification, the 24-hour mathematical formu
 ${activeResponse.plan_summary}
 
 *(Note: The Explanatory Copilot is strictly an analytical observer. To modify operator notes or adjust constraints, use the console dashboard and click 'Optimize Energy'.)*`;
-  };
+    },
+    [activeResponse, activeRequest]
+  );
 
-  const handleSendMessage = (textToSend?: string) => {
-    const query = textToSend || inputQuery.trim();
-    if (!query || isGenerating) return;
+  const handleSendMessage = React.useCallback(
+    (textToSend?: string) => {
+      const query = textToSend || inputQuery.trim();
+      if (!query || isGenerating) return;
 
-    const userMsg: ChatMessage = {
-      id: Date.now().toString(),
-      sender: "user",
-      text: query,
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setInputQuery("");
-    setIsGenerating(true);
-
-    setTimeout(() => {
-      const responseText = generateExplanation(query);
-      const assistantMsg: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        sender: "assistant",
-        text: responseText,
+      const userMsg: ChatMessage = {
+        id: Date.now().toString(),
+        sender: "user",
+        text: query,
         timestamp: new Date().toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
         }),
       };
-      setMessages((prev) => [...prev, assistantMsg]);
-      setIsGenerating(false);
-    }, 350);
-  };
+
+      setMessages((prev) => [...prev, userMsg]);
+      setInputQuery("");
+      setIsGenerating(true);
+
+      setTimeout(() => {
+        const responseText = generateExplanation(query);
+        const assistantMsg: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          sender: "assistant",
+          text: responseText,
+          timestamp: new Date().toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        };
+        setMessages((prev) => [...prev, assistantMsg]);
+        setIsGenerating(false);
+      }, 350);
+    },
+    [inputQuery, isGenerating, generateExplanation]
+  );
+
+  useEffect(() => {
+    const handleCopilotEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<{ query?: string }>;
+      if (customEvent.detail?.query) {
+        handleSendMessage(customEvent.detail.query);
+      }
+    };
+    window.addEventListener("gridwise-ask-copilot", handleCopilotEvent);
+    return () => window.removeEventListener("gridwise-ask-copilot", handleCopilotEvent);
+  }, [handleSendMessage]);
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
