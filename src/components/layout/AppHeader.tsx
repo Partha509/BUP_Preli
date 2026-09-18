@@ -16,8 +16,7 @@ interface DropdownItem {
 const dropdownItems: DropdownItem[] = [
   { label: "24h Dispatch Schedule", tag: "LP SOLVER", href: "/dashboard#schedule" },
   { label: "Operator Directives", tag: "LLM GUARD", href: "/dashboard#directives" },
-  { label: "Design System Specs", tag: "TOKENS", href: "/design-system" },
-  { label: "API Health Monitor", tag: "STATUS", href: "/health" },
+  { label: "API Health Monitor", tag: "STATUS", href: "/health-monitor" },
 ];
 
 export function AppHeader({
@@ -44,7 +43,7 @@ export function AppHeader({
 
   const isOverviewActive = pathname === "/";
   const isDashboardActive = pathname === "/dashboard";
-  const isScheduleActive = pathname === "/design-system";
+  const isScheduleActive = pathname === "/health-monitor";
 
   return (
     <header className="sticky top-3 sm:top-5 z-40 w-full px-3 sm:px-6 pointer-events-none flex justify-center">
@@ -128,7 +127,18 @@ export function AppHeader({
                   <Link
                     key={item.href}
                     href={item.href}
-                    onClick={() => setDropdownOpen(false)}
+                    onClick={(e) => {
+                      setDropdownOpen(false);
+                      if (pathname === "/dashboard" && item.href.includes("#")) {
+                        const targetId = item.href.split("#")[1];
+                        const el = document.getElementById(targetId);
+                        if (el) {
+                          e.preventDefault();
+                          window.history.pushState(null, "", item.href);
+                          el.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }
+                      }
+                    }}
                     className="flex items-center justify-between px-3 py-2 rounded-xl text-[11.5px] font-normal tracking-wide text-[#9EA8A2] hover:text-[#F4F6F5] hover:bg-[#1A231E] transition-colors"
                     role="menuitem"
                   >

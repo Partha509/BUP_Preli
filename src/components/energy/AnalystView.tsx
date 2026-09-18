@@ -37,10 +37,14 @@ export function AnalystView() {
       <PlanSummaryBanner />
 
       {/* 4. Central 24-Hour Energy Dispatch Chart & Battery SoC Curve */}
-      <EnergyDispatchChart />
+      <section id="schedule" className="scroll-mt-24">
+        <EnergyDispatchChart />
+      </section>
 
       {/* 5. Directive Guardrail Verification Review */}
-      <DirectiveInterpretationList />
+      <section id="directives" className="scroll-mt-24">
+        <DirectiveInterpretationList />
+      </section>
 
       {/* 6. Comprehensive 24-Hour Schedule Inspection Table */}
       <HourlyScheduleTable />

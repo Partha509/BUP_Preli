@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test:verify": "node scripts/verify-integration.mjs",
     "test:backend": "node scripts/test-backend.mjs",
-    "test:lp": "node scripts/test-lp-unit.mjs"
+    "test:lp": "node scripts/test-lp-unit.mjs",
+    "test:grounding": "node scripts/test-chatbot-grounding.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",

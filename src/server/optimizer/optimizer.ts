@@ -100,35 +100,39 @@ export function optimizeEnergySchedule(
     b_eq.push(hours[h].demand_kwh);
   }
 
-  // Equality 2: Battery transitions
-  // h = 0: E_0 - c_0 + d_0 = initial_energy_kwh
+  const getMinReserve = (h: number): number => {
+    return minReserveLimits.get(h) ?? battery.minimum_energy_kwh;
+  };
+
+  // Equality 2: Battery transitions (E'_h = E_h - R_h >= 0)
+  // h = 0: E'_0 - c_0 + d_0 = initial_energy_kwh - R_0
   {
     const row = new Array(numVars).fill(0);
-    row[5 * 0 + 4] = 1.0; // E_0
+    row[5 * 0 + 4] = 1.0; // E'_0
     row[5 * 0 + 2] = -1.0; // -c_0
     row[5 * 0 + 3] = 1.0; // d_0
     A_eq.push(row);
-    b_eq.push(battery.initial_energy_kwh);
+    b_eq.push(battery.initial_energy_kwh - getMinReserve(0));
   }
 
-  // h = 1..23: E_h - E_{h-1} - c_h + d_h = 0
+  // h = 1..23: E'_h - E'_{h-1} - c_h + d_h = R_{h-1} - R_h
   for (let h = 1; h < 24; h++) {
     const row = new Array(numVars).fill(0);
-    row[5 * h + 4] = 1.0; // E_h
-    row[5 * (h - 1) + 4] = -1.0; // -E_{h-1}
+    row[5 * h + 4] = 1.0; // E'_h
+    row[5 * (h - 1) + 4] = -1.0; // -E'_{h-1}
     row[5 * h + 2] = -1.0; // -c_h
     row[5 * h + 3] = 1.0; // d_h
     A_eq.push(row);
-    b_eq.push(0.0);
+    b_eq.push(getMinReserve(h - 1) - getMinReserve(h));
   }
 
   // Equality 3: End-of-day battery neutrality
-  // E_23 = initial_energy_kwh
+  // E'_23 = initial_energy_kwh - R_23
   {
     const row = new Array(numVars).fill(0);
-    row[5 * 23 + 4] = 1.0; // E_23
+    row[5 * 23 + 4] = 1.0; // E'_23
     A_eq.push(row);
-    b_eq.push(battery.initial_energy_kwh);
+    b_eq.push(battery.initial_energy_kwh - getMinReserve(23));
   }
 
   // Inequality Constraints: A_ub * x <= b_ub
@@ -144,21 +148,12 @@ export function optimizeEnergySchedule(
       b_ub.push(effectiveSolar[h]);
     }
 
-    // 2. Battery capacity bound: E_h <= capacity_kwh
+    // 2. Battery capacity bound: E'_h <= capacity_kwh - R_h
     {
       const row = new Array(numVars).fill(0);
       row[5 * h + 4] = 1.0;
       A_ub.push(row);
-      b_ub.push(battery.capacity_kwh);
-    }
-
-    // 3. Minimum reserve bound: E_h >= minReserve => -E_h <= -minReserve
-    {
-      const minReserve = minReserveLimits.get(h) ?? battery.minimum_energy_kwh;
-      const row = new Array(numVars).fill(0);
-      row[5 * h + 4] = -1.0;
-      A_ub.push(row);
-      b_ub.push(-minReserve);
+      b_ub.push(Math.max(0, battery.capacity_kwh - getMinReserve(h)));
     }
 
     // 4. Charge rate limit: c_h <= max_charge

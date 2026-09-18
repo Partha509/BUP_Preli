@@ -69,16 +69,6 @@ export function HeroSection() {
               <ArrowRight className="w-3.5 h-3.5" />
             </Button>
           </Link>
-
-          <Link href="/design-system">
-            <Button
-              variant="outline"
-              size="lg"
-              className="border-[#2D3A32] bg-[#141A17] hover:bg-[#1E2622] hover:border-[#3E4E43] text-[#F3F5F4] hover:text-[#E5B25D] text-xs font-normal tracking-wider uppercase px-5"
-            >
-              Design System Specs
-            </Button>
-          </Link>
         </div>
       </div>
     </section>

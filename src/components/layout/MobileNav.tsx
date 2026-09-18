@@ -19,7 +19,7 @@ import {
   LayoutDashboard,
   CalendarClock,
   ShieldCheck,
-  Palette,
+  Activity,
   Sparkles,
 } from "lucide-react";
 
@@ -34,7 +34,7 @@ const navItems: NavItem[] = [
   { label: "Operations Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "24h Schedule & Charts", href: "/dashboard#schedule", icon: CalendarClock },
   { label: "Directive Inspector", href: "/dashboard#directives", icon: ShieldCheck },
-  { label: "Design System", href: "/design-system", icon: Palette },
+  { label: "API Health Monitor", href: "/health-monitor", icon: Activity },
 ];
 
 export function MobileNav() {
@@ -86,7 +86,18 @@ export function MobileNav() {
               <Link
                 key={item.href}
                 href={item.href}
-                onClick={() => setOpen(false)}
+                onClick={(e) => {
+                  setOpen(false);
+                  if (pathname === "/dashboard" && item.href.includes("#")) {
+                    const targetId = item.href.split("#")[1];
+                    const el = document.getElementById(targetId);
+                    if (el) {
+                      e.preventDefault();
+                      window.history.pushState(null, "", item.href);
+                      el.scrollIntoView({ behavior: "smooth", block: "start" });
+                    }
+                  }
+                }}
                 className={`flex items-center gap-3 px-3.5 py-2.5 rounded-full text-xs tracking-wider uppercase transition-colors ${
                   isActive
                     ? "bg-[#1B241F] text-[#E5B25D] border border-[#3A4B40] font-normal"

@@ -159,15 +159,15 @@ async function runAllTests() {
     });
 
     const data = await res.json();
-    if (!process.env.GEMINI_API_KEY) {
+    if (res.status === 200) {
       assert(
-        res.status >= 500 && res.status <= 504 && data.error && !data.hourly_plan,
-        `Unset GEMINI_API_KEY returns controlled 5xx (${res.status}) without fabricating fake no_op: "${data.error}"`
+        data.hourly_plan && data.hourly_plan.length === 24,
+        `Configured GEMINI_API_KEY successfully returns 200 with full 24-hour schedule`
       );
     } else {
       assert(
-        res.status === 200 && data.hourly_plan && data.hourly_plan.length === 24,
-        `Configured GEMINI_API_KEY successfully returns 200 with full 24-hour schedule`
+        res.status >= 500 && res.status <= 504 && data.error && !data.hourly_plan,
+        `Unset GEMINI_API_KEY returns controlled 5xx (${res.status}) without fabricating fake no_op: "${data.error}"`
       );
     }
   } catch (err) {

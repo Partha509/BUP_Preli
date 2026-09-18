@@ -38,7 +38,11 @@ export async function interpretOperatorNotesWithLlm(
     );
   }
 
-  const model = (process.env.GEMINI_MODEL || "gemini-2.5-flash").trim();
+  let model = (process.env.GEMINI_MODEL || "gemini-flash-lite-latest").trim();
+  if (model === "gemini-2.5-flash" || model === "gemini-2.5-flash-lite") {
+    // Google Generative Language API retired gemini-2.5-flash; auto-upgrade to current flash-lite
+    model = "gemini-flash-lite-latest";
+  }
   const prompt = buildDirectiveInterpretationPrompt(operatorNotes, battery);
 
   const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(

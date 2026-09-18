@@ -9,6 +9,44 @@ import { Zap, ShieldCheck, Sparkles } from "lucide-react";
 export default function DashboardPage() {
   const { activeRequest, activeResponse, isLoading } = useScenario();
 
+  // Reliable client-side hash-scroll handler for Next.js App Router
+  React.useEffect(() => {
+    const scrollToHash = () => {
+      const hash = window.location.hash;
+      if (!hash) return;
+      const targetId = hash.replace(/^#/, "");
+      if (!targetId) return;
+
+      const executeScroll = () => {
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+          return true;
+        }
+        return false;
+      };
+
+      if (!executeScroll()) {
+        const t1 = setTimeout(executeScroll, 60);
+        const t2 = setTimeout(executeScroll, 180);
+        const t3 = setTimeout(executeScroll, 360);
+        return () => {
+          clearTimeout(t1);
+          clearTimeout(t2);
+          clearTimeout(t3);
+        };
+      }
+    };
+
+    const cleanup = scrollToHash();
+    window.addEventListener("hashchange", scrollToHash);
+
+    return () => {
+      if (cleanup) cleanup();
+      window.removeEventListener("hashchange", scrollToHash);
+    };
+  }, []);
+
   return (
     <AppShell>
       <div className="space-y-6 pb-16">

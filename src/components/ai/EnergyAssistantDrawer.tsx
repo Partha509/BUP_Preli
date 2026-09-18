@@ -128,16 +128,18 @@ ${
 }`;
     }
 
-    if (q.includes("neutrality") || q.includes("e23 = e0") || q.includes("end-of-day")) {
-      const delta = Math.abs(finalEnergy - initialEnergy);
-      const isNeutral = delta <= 0.05;
+    if (q.includes("change") || q.includes("reduce the cost further") || q.includes("modify") || q.includes("re-optimize")) {
+      return "The Explanatory Copilot cannot directly modify or re-optimize the active schedule. Changes must go through the core optimization engine by adjusting scenario parameters or operator inputs on the console dashboard and executing 'Optimize Energy' again.";
+    }
 
-      return `**End-of-Day Battery Neutrality Verification (E23 = E0):**
-- Beginning-of-Day Storage (E0): ${initialEnergy.toFixed(2)} kWh
-- Final End-of-Day Storage (E23): ${finalEnergy.toFixed(2)} kWh
-- Neutrality Discrepancy: ${delta.toFixed(3)} kWh (${isNeutral ? "VALID" : "FLAGGED"})
+    if (q.includes("capacity")) {
+      return activeRequest.battery?.capacity_kwh != null
+        ? `The battery capacity is **${activeRequest.battery.capacity_kwh} kWh**.`
+        : "The battery capacity is not available in the current optimization data.";
+    }
 
-As required by Section 02.2 of the specification, the 24-hour mathematical formulation enforces strict energy conservation ensuring the battery state of charge finishes at the exact initial reserve ($E_{23} = E_0$) ready for the next operational cycle.`;
+    if (q.includes("weather") || (q.includes("tomorrow") && !q.includes("tariff"))) {
+      return "That information is not available in the current optimization data.";
     }
 
     // Default response explaining current plan summary
@@ -152,7 +154,7 @@ ${activeResponse.plan_summary}
 *(Note: The Explanatory Copilot is strictly an analytical observer. To modify operator notes or adjust constraints, use the console dashboard and click 'Optimize Energy'.)*`;
   };
 
-  const handleSendMessage = (textToSend?: string) => {
+  const handleSendMessage = async (textToSend?: string) => {
     const query = textToSend || inputQuery.trim();
     if (!query || isGenerating) return;
 
@@ -166,24 +168,78 @@ ${activeResponse.plan_summary}
       }),
     };
 
-    setMessages((prev) => [...prev, userMsg]);
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
     setInputQuery("");
     setIsGenerating(true);
 
-    setTimeout(() => {
-      const responseText = generateExplanation(query);
-      const assistantMsg: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        sender: "assistant",
-        text: responseText,
-        timestamp: new Date().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
+    let responseText = "";
+
+    try {
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: updatedMessages.map((m) => ({
+            sender: m.sender,
+            text: m.text,
+          })),
+          scenarioContext: {
+            scenario_id: activeRequest.scenario_id,
+            total_cost_bdt: activeResponse?.total_cost_bdt,
+            total_grid_kwh: activeResponse?.total_grid_kwh,
+            peak_grid_kwh: activeResponse?.peak_grid_kwh,
+            plan_summary: activeResponse?.plan_summary,
+            battery: activeRequest.battery,
+            directives: activeResponse?.directive_interpretation?.map((d) => ({
+              note_index: d.note_index,
+              applies: d.applies,
+              directive_type: d.directive_type,
+              explanation: d.explanation,
+              structured_adjustment: d.structured_adjustment,
+            })),
+            hourly_plan: activeResponse?.hourly_plan,
+            backend_verification:
+              activeResponse?.hourly_plan && activeResponse.hourly_plan.length === 24
+                ? {
+                    neutrality_verified:
+                      Math.abs(
+                        activeResponse.hourly_plan[23].battery_energy_after_kwh -
+                          activeRequest.battery.initial_energy_kwh
+                      ) <= 0.05,
+                    e0: activeRequest.battery.initial_energy_kwh,
+                    e23: activeResponse.hourly_plan[23].battery_energy_after_kwh,
+                  }
+                : undefined,
+          },
         }),
-      };
-      setMessages((prev) => [...prev, assistantMsg]);
-      setIsGenerating(false);
-    }, 350);
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.reply) {
+          responseText = data.reply;
+        }
+      }
+    } catch (err) {
+      console.warn("Live Gemini chat endpoint unavailable, falling back to local domain engine", err);
+    }
+
+    if (!responseText) {
+      responseText = generateExplanation(query);
+    }
+
+    const assistantMsg: ChatMessage = {
+      id: (Date.now() + 1).toString(),
+      sender: "assistant",
+      text: responseText,
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+    setMessages((prev) => [...prev, assistantMsg]);
+    setIsGenerating(false);
   };
 
   return (
@@ -203,9 +259,11 @@ ${activeResponse.plan_summary}
                 <SheetTitle className="text-sm font-bold tracking-tight text-foreground">
                   GridWise Explanatory Copilot
                 </SheetTitle>
-                <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 inline-block" />
-                  <span>Context: {activeRequest.scenario_id}</span>
+                <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 inline-block animate-pulse" />
+                  <span className="text-emerald-400 font-medium">Gemini AI</span>
+                  <span className="text-muted-foreground/40">•</span>
+                  <span>{activeRequest.scenario_id}</span>
                 </div>
               </div>
             </div>

@@ -34,10 +34,14 @@ export function OperatorView() {
       <OperatorNotesEditor />
 
       {/* 3. Directive Interpretation & Guardrail Visualizer */}
-      <DirectiveInterpretationList />
+      <section id="directives" className="scroll-mt-24">
+        <DirectiveInterpretationList />
+      </section>
 
       {/* 4. 24-Hour Schedule Inspection Table */}
-      <HourlyScheduleTable />
+      <section id="schedule" className="scroll-mt-24">
+        <HourlyScheduleTable />
+      </section>
 
       {/* 5. Secondary Dispatch Timeline & KPIs */}
       <div className="pt-4 border-t border-border space-y-4">
