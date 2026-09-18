@@ -12,7 +12,7 @@ import { BarChart3 } from "lucide-react";
 
 export function AnalystView() {
   return (
-    <div className="space-y-6">
+    <div id="demo-section-analyst" className="space-y-6 transition-all duration-300">
       {/* Analyst Role Focus Header Banner */}
       <div className="p-3.5 rounded-lg border border-indigo-500/20 bg-indigo-500/5 flex items-center justify-between gap-3 text-xs font-mono">
         <div className="flex items-center gap-2">

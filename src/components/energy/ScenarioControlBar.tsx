@@ -28,7 +28,8 @@ export function ScenarioControlBar({ className = "" }: { className?: string }) {
 
   return (
     <div
-      className={`rounded-xl border border-border bg-card p-4 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 ${className}`}
+      id="demo-section-scenario"
+      className={`rounded-xl border border-border bg-card p-4 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 transition-all duration-300 ${className}`}
     >
       {/* Left: Scenario Selector Dropdown */}
       <div className="flex-1 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">

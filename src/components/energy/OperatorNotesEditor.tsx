@@ -69,7 +69,10 @@ export function OperatorNotesEditor({ className = "" }: { className?: string }) 
   };
 
   return (
-    <div className={`rounded-xl border border-border bg-card p-5 md:p-6 space-y-5 ${className}`}>
+    <div
+      id="demo-section-notes"
+      className={`rounded-xl border border-border bg-card p-5 md:p-6 space-y-5 transition-all duration-300 ${className}`}
+    >
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
         <div className="flex items-center gap-2">
