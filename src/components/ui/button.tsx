@@ -5,33 +5,37 @@ import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  "inline-flex items-center justify-center whitespace-nowrap rounded-full text-xs font-medium tracking-wider uppercase transition-all duration-150 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary/90 active:bg-primary/95",
+          "bg-[#1B241F] text-[#E5B25D] border border-[#3A4B40] hover:bg-[#25322B] hover:text-[#F3CA7E] hover:border-[#4B5F52] shadow-xs",
+        gold:
+          "bg-[#E5B25D] text-[#0E1311] font-semibold border border-[#E5B25D] hover:bg-[#F3CA7E] hover:border-[#F3CA7E] shadow-xs",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+          "bg-destructive/15 text-destructive border border-destructive/30 hover:bg-destructive/25",
         outline:
-          "border border-border bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
+          "border border-border bg-card/40 text-foreground hover:bg-secondary hover:border-strong-border",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-secondary text-secondary-foreground border border-border hover:bg-secondary/80",
+        ghost:
+          "text-muted-foreground hover:text-foreground hover:bg-secondary/60",
+        link:
+          "text-[#E5B25D] underline-offset-4 hover:underline",
         // Energy Domain Accent Buttons
         solar:
-          "bg-amber-500/10 text-amber-500 border border-amber-500/30 hover:bg-amber-500/20 active:bg-amber-500/30",
+          "bg-amber-500/10 text-amber-400 border border-amber-500/25 hover:bg-amber-500/20",
         battery:
-          "bg-sky-500/10 text-sky-500 border border-sky-500/30 hover:bg-sky-500/20 active:bg-sky-500/30",
+          "bg-teal-500/10 text-teal-400 border border-teal-500/25 hover:bg-teal-500/20",
         grid:
-          "bg-indigo-500/10 text-indigo-500 border border-indigo-500/30 hover:bg-indigo-500/20 active:bg-indigo-500/30",
+          "bg-slate-500/10 text-slate-400 border border-slate-500/25 hover:bg-slate-500/20",
       },
       size: {
-        default: "h-9 px-4 py-2",
-        sm: "h-8 rounded-md px-3 text-xs",
-        lg: "h-10 rounded-md px-6 text-base",
-        icon: "h-9 w-9",
+        default: "h-8 sm:h-9 px-4 py-1.5",
+        sm: "h-7 sm:h-8 px-3 text-[11px]",
+        lg: "h-9 sm:h-10 px-6 text-xs",
+        icon: "h-8 w-8 rounded-full",
       },
     },
     defaultVariants: {

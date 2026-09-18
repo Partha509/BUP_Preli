@@ -32,45 +32,45 @@ export function ChartLegendToggles({
   }[] = [
     {
       key: "demand",
-      label: "Campus Demand",
-      color: "#94a3b8", // Slate 400
-      bgColor: "rgba(148, 163, 184, 0.15)",
+      label: "Demand",
+      color: "#FB7185",
+      bgColor: "rgba(251, 113, 133, 0.12)",
       borderStyle: "dashed",
     },
     {
       key: "solar",
-      label: "Solar Used",
-      color: "#f59e0b", // Amber 500
-      bgColor: "rgba(245, 158, 11, 0.15)",
+      label: "Solar",
+      color: "#E5B25D",
+      bgColor: "rgba(229, 178, 93, 0.12)",
     },
     {
       key: "grid",
-      label: "Grid Purchase",
-      color: "#6366f1", // Indigo 500
-      bgColor: "rgba(99, 102, 241, 0.15)",
+      label: "Grid",
+      color: "#94A3B8",
+      bgColor: "rgba(148, 163, 184, 0.12)",
     },
     {
       key: "batteryDischarge",
-      label: "Battery Discharge",
-      color: "#10b981", // Emerald 500
-      bgColor: "rgba(16, 185, 129, 0.15)",
+      label: "Discharge",
+      color: "#2DD4BF",
+      bgColor: "rgba(45, 212, 191, 0.12)",
     },
     {
       key: "batteryCharge",
-      label: "Battery Charge",
-      color: "#06b6d4", // Cyan 500
-      bgColor: "rgba(6, 182, 212, 0.15)",
+      label: "Charge",
+      color: "#0EA5E9",
+      bgColor: "rgba(14, 165, 233, 0.12)",
     },
     {
       key: "tariff",
-      label: "Tariff (BDT/kWh)",
-      color: "#a855f7", // Purple 500
-      bgColor: "rgba(168, 85, 247, 0.15)",
+      label: "Tariff",
+      color: "#34D399",
+      bgColor: "rgba(52, 211, 153, 0.12)",
     },
   ];
 
   return (
-    <div className={`flex flex-wrap items-center gap-1.5 font-mono text-[11px] ${className}`}>
+    <div className={`flex flex-wrap items-center gap-1.5 font-mono text-[10px] ${className}`}>
       {items.map((item) => {
         const isVisible = visibility[item.key];
         return (
@@ -78,17 +78,14 @@ export function ChartLegendToggles({
             key={item.key}
             type="button"
             onClick={() => onToggle(item.key)}
-            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md border transition-all ${
+            className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border transition-all uppercase tracking-wider select-none cursor-pointer ${
               isVisible
-                ? "border-border shadow-2xs text-foreground"
-                : "border-border/40 opacity-45 line-through text-muted-foreground"
+                ? "border-border shadow-2xs text-foreground bg-secondary/60"
+                : "border-border/30 opacity-40 line-through text-muted-foreground bg-transparent"
             }`}
-            style={{
-              backgroundColor: isVisible ? item.bgColor : "transparent",
-            }}
           >
             <span
-              className="w-2.5 h-2.5 rounded-full inline-block shrink-0"
+              className="w-2 h-2 rounded-full inline-block shrink-0"
               style={{
                 backgroundColor: item.color,
                 border: item.borderStyle ? "1px dashed #ffffff" : "none",
@@ -96,9 +93,9 @@ export function ChartLegendToggles({
             />
             <span>{item.label}</span>
             {isVisible ? (
-              <Eye className="w-3 h-3 text-muted-foreground ml-0.5" />
+              <Eye className="w-2.5 h-2.5 text-muted-foreground ml-0.5" />
             ) : (
-              <EyeOff className="w-3 h-3 text-muted-foreground ml-0.5" />
+              <EyeOff className="w-2.5 h-2.5 text-muted-foreground ml-0.5" />
             )}
           </button>
         );

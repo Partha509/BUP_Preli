@@ -3,50 +3,53 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold font-mono transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-normal tracking-[0.1em] uppercase transition-colors select-none",
   {
     variants: {
       variant: {
         default:
-          "border-transparent bg-primary text-primary-foreground shadow hover:bg-primary/80",
+          "border-[#3A4B40] bg-[#1B241F] text-[#E5B25D]",
+        gold:
+          "border-[#E5B25D]/40 bg-[#E5B25D]/10 text-[#E5B25D]",
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+          "border-border bg-secondary text-secondary-foreground",
         destructive:
-          "border-transparent bg-destructive text-destructive-foreground shadow hover:bg-destructive/80",
-        outline: "text-foreground border-border",
+          "border-destructive/30 bg-destructive/10 text-destructive",
+        outline:
+          "text-muted-foreground border-border bg-transparent",
         // Status Variants
         success:
-          "border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+          "border-emerald-500/30 bg-emerald-500/10 text-emerald-500 dark:text-emerald-400",
         warning:
-          "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+          "border-amber-500/30 bg-amber-500/10 text-amber-500 dark:text-[#E5B25D]",
         danger:
-          "border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400",
+          "border-rose-500/30 bg-rose-500/10 text-rose-500 dark:text-rose-400",
         info:
-          "border-sky-500/30 bg-sky-500/10 text-sky-600 dark:text-sky-400",
+          "border-slate-500/30 bg-slate-500/10 text-slate-400",
         // Energy Domain Variants
         solar:
-          "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+          "border-amber-500/30 bg-amber-500/10 text-amber-500 dark:text-[#E5B25D]",
         battery:
-          "border-sky-500/40 bg-sky-500/10 text-sky-600 dark:text-sky-400",
+          "border-teal-500/30 bg-teal-500/10 text-teal-500 dark:text-teal-400",
         grid:
-          "border-indigo-500/40 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400",
+          "border-slate-500/30 bg-slate-500/10 text-slate-400",
         demand:
-          "border-rose-500/40 bg-rose-500/10 text-rose-600 dark:text-rose-400",
+          "border-rose-500/30 bg-rose-500/10 text-rose-500 dark:text-rose-400",
         tariff:
-          "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
+          "border-emerald-500/30 bg-emerald-500/10 text-emerald-500 dark:text-emerald-400",
         // Directive Canonical Variants
         directive_solar:
-          "border-amber-500/50 bg-amber-500/15 text-amber-500 font-bold tracking-tight",
+          "border-amber-500/40 bg-amber-500/10 text-[#E5B25D]",
         directive_reserve:
-          "border-sky-500/50 bg-sky-500/15 text-sky-400 font-bold tracking-tight",
+          "border-teal-500/40 bg-teal-500/10 text-teal-400",
         directive_nocharge:
-          "border-purple-500/50 bg-purple-500/15 text-purple-400 font-bold tracking-tight",
+          "border-purple-500/40 bg-purple-500/10 text-purple-400",
         directive_nodischarge:
-          "border-rose-500/50 bg-rose-500/15 text-rose-400 font-bold tracking-tight",
+          "border-rose-500/40 bg-rose-500/10 text-rose-400",
         directive_gridcap:
-          "border-indigo-500/50 bg-indigo-500/15 text-indigo-400 font-bold tracking-tight",
+          "border-slate-500/40 bg-slate-500/10 text-slate-300",
         directive_noop:
-          "border-slate-500/50 bg-slate-500/15 text-slate-400 font-bold tracking-tight",
+          "border-border bg-secondary/50 text-muted-foreground",
       },
     },
     defaultVariants: {

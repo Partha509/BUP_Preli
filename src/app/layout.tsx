@@ -38,10 +38,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
-    { media: "(prefers-color-scheme: dark)", color: "#090d16" },
-  ],
+  themeColor: "#0A0E0C",
 };
 
 export default function RootLayout({
@@ -50,27 +47,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                const storedTheme = localStorage.getItem('gridwise-theme');
-                if (storedTheme === 'light') {
-                  document.documentElement.classList.remove('dark');
-                  document.documentElement.classList.add('light');
-                } else {
-                  document.documentElement.classList.add('dark');
-                  document.documentElement.classList.remove('light');
-                }
-              } catch (e) {
-                document.documentElement.classList.add('dark');
-              }
-            `,
-          }}
-        />
-      </head>
+    <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} font-sans min-h-screen antialiased bg-background text-foreground`}
       >
