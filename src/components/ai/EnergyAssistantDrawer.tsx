@@ -58,8 +58,9 @@ export function EnergyAssistantDrawer({
    * Generates domain-aware explanation strictly grounded in active scenario results.
    * Never alters the scenario or runs client-side optimization.
    */
-  const generateExplanation = (query: string): string => {
-    const q = query.toLowerCase();
+  const generateExplanation = React.useCallback(
+    (query: string): string => {
+      const q = query.toLowerCase();
 
     if (!activeResponse) {
       return "No optimization plan has been calculated yet. Please click 'Optimize Energy' on the console dashboard to dispatch POST /optimize-energy first.";
@@ -152,95 +153,111 @@ ${
 ${activeResponse.plan_summary}
 
 *(Note: The Explanatory Copilot is strictly an analytical observer. To modify operator notes or adjust constraints, use the console dashboard and click 'Optimize Energy'.)*`;
-  };
+    },
+    [activeResponse, activeRequest]
+  );
 
-  const handleSendMessage = async (textToSend?: string) => {
-    const query = textToSend || inputQuery.trim();
-    if (!query || isGenerating) return;
+  const handleSendMessage = React.useCallback(
+    async (textToSend?: string) => {
+      const query = textToSend || inputQuery.trim();
+      if (!query || isGenerating) return;
 
-    const userMsg: ChatMessage = {
-      id: Date.now().toString(),
-      sender: "user",
-      text: query,
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
-
-    const updatedMessages = [...messages, userMsg];
-    setMessages(updatedMessages);
-    setInputQuery("");
-    setIsGenerating(true);
-
-    let responseText = "";
-
-    try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: updatedMessages.map((m) => ({
-            sender: m.sender,
-            text: m.text,
-          })),
-          scenarioContext: {
-            scenario_id: activeRequest.scenario_id,
-            total_cost_bdt: activeResponse?.total_cost_bdt,
-            total_grid_kwh: activeResponse?.total_grid_kwh,
-            peak_grid_kwh: activeResponse?.peak_grid_kwh,
-            plan_summary: activeResponse?.plan_summary,
-            battery: activeRequest.battery,
-            directives: activeResponse?.directive_interpretation?.map((d) => ({
-              note_index: d.note_index,
-              applies: d.applies,
-              directive_type: d.directive_type,
-              explanation: d.explanation,
-              structured_adjustment: d.structured_adjustment,
-            })),
-            hourly_plan: activeResponse?.hourly_plan,
-            backend_verification:
-              activeResponse?.hourly_plan && activeResponse.hourly_plan.length === 24
-                ? {
-                    neutrality_verified:
-                      Math.abs(
-                        activeResponse.hourly_plan[23].battery_energy_after_kwh -
-                          activeRequest.battery.initial_energy_kwh
-                      ) <= 0.05,
-                    e0: activeRequest.battery.initial_energy_kwh,
-                    e23: activeResponse.hourly_plan[23].battery_energy_after_kwh,
-                  }
-                : undefined,
-          },
+      const userMsg: ChatMessage = {
+        id: Date.now().toString(),
+        sender: "user",
+        text: query,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
         }),
-      });
+      };
 
-      if (res.ok) {
-        const data = await res.json();
-        if (data?.reply) {
-          responseText = data.reply;
+      const updatedMessages = [...messages, userMsg];
+      setMessages(updatedMessages);
+      setInputQuery("");
+      setIsGenerating(true);
+
+      let responseText = "";
+
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            messages: updatedMessages.map((m) => ({
+              sender: m.sender,
+              text: m.text,
+            })),
+            scenarioContext: {
+              scenario_id: activeRequest.scenario_id,
+              total_cost_bdt: activeResponse?.total_cost_bdt,
+              total_grid_kwh: activeResponse?.total_grid_kwh,
+              peak_grid_kwh: activeResponse?.peak_grid_kwh,
+              plan_summary: activeResponse?.plan_summary,
+              battery: activeRequest.battery,
+              directives: activeResponse?.directive_interpretation?.map((d) => ({
+                note_index: d.note_index,
+                applies: d.applies,
+                directive_type: d.directive_type,
+                explanation: d.explanation,
+                structured_adjustment: d.structured_adjustment,
+              })),
+              hourly_plan: activeResponse?.hourly_plan,
+              backend_verification:
+                activeResponse?.hourly_plan && activeResponse.hourly_plan.length === 24
+                  ? {
+                      neutrality_verified:
+                        Math.abs(
+                          activeResponse.hourly_plan[23].battery_energy_after_kwh -
+                            activeRequest.battery.initial_energy_kwh
+                        ) <= 0.05,
+                      e0: activeRequest.battery.initial_energy_kwh,
+                      e23: activeResponse.hourly_plan[23].battery_energy_after_kwh,
+                    }
+                  : undefined,
+            },
+          }),
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data?.reply) {
+            responseText = data.reply;
+          }
         }
+      } catch (err) {
+        console.warn("Live Gemini chat endpoint unavailable, falling back to local domain engine", err);
       }
-    } catch (err) {
-      console.warn("Live Gemini chat endpoint unavailable, falling back to local domain engine", err);
-    }
 
-    if (!responseText) {
-      responseText = generateExplanation(query);
-    }
+      if (!responseText) {
+        responseText = generateExplanation(query);
+      }
 
-    const assistantMsg: ChatMessage = {
-      id: (Date.now() + 1).toString(),
-      sender: "assistant",
-      text: responseText,
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
+      const assistantMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        sender: "assistant",
+        text: responseText,
+        timestamp: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
+      setMessages((prev) => [...prev, assistantMsg]);
+      setIsGenerating(false);
+    },
+    [inputQuery, isGenerating, messages, activeRequest, activeResponse, generateExplanation]
+  );
+
+  useEffect(() => {
+    const handleCopilotEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<{ query?: string }>;
+      if (customEvent.detail?.query) {
+        handleSendMessage(customEvent.detail.query);
+      }
     };
-    setMessages((prev) => [...prev, assistantMsg]);
-    setIsGenerating(false);
-  };
+    window.addEventListener("gridwise-ask-copilot", handleCopilotEvent);
+    return () => window.removeEventListener("gridwise-ask-copilot", handleCopilotEvent);
+  }, [handleSendMessage]);
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>

@@ -3,6 +3,7 @@
 import React from "react";
 import { AppShell } from "@/components/layout";
 import { RoleAwareDashboard } from "@/components/energy";
+import { DemoWalkthroughBar } from "@/components/demo";
 import { useScenario } from "@/context/ScenarioContext";
 import { Zap, ShieldCheck, Sparkles } from "lucide-react";
 
@@ -50,6 +51,9 @@ export default function DashboardPage() {
   return (
     <AppShell>
       <div className="space-y-6 pb-16">
+        {/* 3-Minute Hackathon Demo Presentation Helper Bar */}
+        <DemoWalkthroughBar />
+
         {/* Top Header Information */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
           <div>

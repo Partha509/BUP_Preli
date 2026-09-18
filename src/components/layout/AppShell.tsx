@@ -26,8 +26,15 @@ export function AppShell({
     const handleToggleAi = () => {
       setIsAiOpen((prev) => !prev);
     };
+    const handleAskCopilot = () => {
+      setIsAiOpen(true);
+    };
     window.addEventListener("gridwise-toggle-ai", handleToggleAi);
-    return () => window.removeEventListener("gridwise-toggle-ai", handleToggleAi);
+    window.addEventListener("gridwise-ask-copilot", handleAskCopilot);
+    return () => {
+      window.removeEventListener("gridwise-toggle-ai", handleToggleAi);
+      window.removeEventListener("gridwise-ask-copilot", handleAskCopilot);
+    };
   }, []);
 
   const handleOptimize = () => {
